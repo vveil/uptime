@@ -8,7 +8,8 @@ INTERVAL="${INTERVAL}"
 
 # Function to send Telegram message
 send_telegram_message() {
-    local message="⚠️ Website $WEBSITE is DOWN at $(date '+%Y-%m-%d %H:%M:%S')"
+    local status_code=$1
+    local message="⚠️ Website $WEBSITE returned error $status_code at $(date '+%Y-%m-%d %H:%M:%S')"
     curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
         -d chat_id="${CHAT_ID}" \
         -d text="${message}" \
@@ -17,8 +18,17 @@ send_telegram_message() {
 
 # Main monitoring loop
 while true; do
-    if ! ping -c 1 ${WEBSITE} &>/dev/null; then
-        send_telegram_message
+    # Get HTTP status code with curl
+    # -s: silent mode
+    # -o /dev/null: discard response body
+    # -w "%{http_code}": only output the status code
+    # -I: send HEAD request instead of GET
+    status_code=$(curl -s -o /dev/null -w "%{http_code}" -I "https://${WEBSITE}")
+    
+    # Check if status code starts with 5
+    if [[ $status_code =~ ^5[0-9][0-9]$ ]]; then
+        send_telegram_message "$status_code"
     fi
+    
     sleep ${INTERVAL}
 done
