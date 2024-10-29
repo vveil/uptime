@@ -4,7 +4,7 @@ RUN apk add --no-cache bash curl iputils
 
 WORKDIR /app
 
-COPY script/monitor.sh .
+COPY scripts/monitor.sh .
 RUN chmod +x monitor.sh
 
 CMD ["./monitor.sh"]
