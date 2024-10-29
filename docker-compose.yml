@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  website-monitor:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: ghcr.io/vveil/uptime.script:latest
+    container_name: website-monitor
+    environment:
+      - WEBSITE=${WEBSITE}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - CHAT_ID=${CHAT_ID}
+      - INTERVAL=600
+    restart: always
