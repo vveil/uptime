@@ -8,7 +8,7 @@ services:
     image: ghcr.io/vveil/uptime:latest
     container_name: website-monitor
     environment:
-      - WEBSITE=${WEBSITE}
+      - WEBSITES=${WEBSITES}
       - BOT_TOKEN=${BOT_TOKEN}
       - CHAT_ID=${CHAT_ID}
       - INTERVAL=600
