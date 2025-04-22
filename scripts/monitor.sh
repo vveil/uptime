@@ -2,13 +2,11 @@
 
 # Configuration from environment variables
 # WEBSITES should be a comma-separated list of domains
-# Example: export WEBSITES="example.com,google.com,github.com"
 WEBSITES=(${WEBSITES//,/ })
 BOT_TOKEN="${BOT_TOKEN}"
 CHAT_ID="${CHAT_ID}"
-INTERVAL="${INTERVAL:-300}"  # Default to 5 minutes if not set
+INTERVAL="${INTERVAL:-300}"
 
-# Function to get HTTP status code description
 get_status_description() {
     local code=$1
     case $code in
@@ -34,7 +32,6 @@ get_status_description() {
     esac
 }
 
-# Function to send Telegram message
 send_telegram_message() {
     local website=$1
     local status_code=$2
@@ -92,11 +89,9 @@ fi
 echo "Starting monitoring for websites: ${WEBSITES[*]}"
 echo "Check interval: ${INTERVAL} seconds"
 
-# Main monitoring loop
 while true; do
     for website in "${WEBSITES[@]}"; do
         check_website "$website"
-        # Small delay between checking different websites
         sleep 2
     done
     
